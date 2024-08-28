@@ -1,88 +1,124 @@
-import fetch from 'node-fetch'
-import fs from 'fs'
-import jimp from 'jimp'
-let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-let wm = '◄⏤͟͟͞𝗦𝗔𝗬𝗘𝗗-𝗦𝗛𝗔𝗪𝗔𝗭𝗔'
+import {watchFile, unwatchFile} from  fs ;
+import chalk from  chalk ;
+import {fileURLToPath} from  url ;
+import fs from  fs ; 
+import moment from  moment-timezone ;
 
+global.botnumber = ""
+global.confirmCode = ""
+global.authFile = `MysticSession`;
 
-let fakecontact = { 'key': { 'participants': '0@s.whatsapp.net', 'remoteJid': 'status@broadcast', 'fromMe': false, 'id': '𝐒𝐇𝐀𝐖𝐀𝐙𝐀-𝐁𝐎𝐓' }, 'message': { 'contactMessage': { 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` } }, 'participant': '0@s.whatsapp.net' };
-let fakegif = {key: {participant: `0@s.whatsapp.net`, ...('6289643739077-1613049930@g.us' ? {remoteJid: '6289643739077-1613049930@g.us'} : {})}, message: {'videoMessage': {'title': '𝕊ℍ𝔸𝕎𝔸ℤ𝔸-𝔹𝕆𝕋', 'h': `Hmm`, 'seconds': '99999', 'gifPlayback': 'true', 'caption': '𝐒𝐇𝐀𝐖𝐀𝐙𝐀-𝐁𝐎𝐓', 'jpegThumbnail': false}}};
-let mkey = {'key': {'participants': '0@s.whatsapp.net', 'remoteJid': '6289643739077-1613049930@g.us', 'fromMe': false, 'id': 'Halo'}, 'message': {'contactMessage': {'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`}}, 'participant': '0@s.whatsapp.net'};
-let fakelocation = {
-  key: {
-    fromMe: false,
-    participant: '0@s.whatsapp.net',
-    remoteJid: 'status@broadcast'
-  },
-  message: {
-    locationMessage: {
-      degreesLatitude: 37.7749,
-      degreesLongitude: -122.4194,
-      name: 'Palestine',
-      address: 'San Francisco, CA, USA',
-      url: 'https://maps.google.com/?q=37.7749,-122.4194'
-    }
-  }
-};
-let faketext = {
-  key: {
-    fromMe: false,
-    participant: '0@s.whatsapp.net',
-    remoteJid: 'status@broadcast'
-  },
-  message: {
-    conversation: 'فلسطين حرة مهما كان الثمن ❤️🧞'
-  }
-};
+// Cambiar a true si el Bot responde a sus comandos con otros comandos.
+// Cambiar a false para usar el Bot desde el mismo numero del Bot.
+// Error de m.isBaileys marcado como false fix temporal
+global.isBaileysFail = false
 
-let fake = [fakegif, fakecontact, mkey, fakelocation, faketext]
-let vn = fake[Math.floor(Math.random() * fake.length)];
+global.owner = [
+  [ 5219992095479 ,  👑 Mystic - Creador 👑 , true],
+  [ 51940617554 ,  💫 Mystic - Collaborator 2 💫 , true],
+  [ 51996089079 ,  💫 Mystic - Collaborator 3 💫 , true],
+  [ 5218442286089 ,  💫 Mystic - Collaborator 4 💫 , true],
+  [ 50246028932 ,  💫 Mystic - Collaborator 5 💫 , true],
+  [ 5212412377467 ,  💫 Mystic - Collaborator 6 💫 , true],
+  [ 5215517489568 ,  💫 Mystic - Rey Endymion 💫 , false],
+  [ 59895555511 ,  💫 Mystic - Collaborator 8 💫 , true],
+  [ 573012482597 ,  💫 Mystic - OfcDiego , true],
+  [ 59175655964 ,  💫 Mystic - By Alba070503 💫 , true],
+  [ 5493794297363 ,  💫 Mystic - Gabriel Ofc , true], 
+  [ 393518398856 ,  💫 Mystic - Tester Fabri115💫 , true],
+  [ 212781160203 ,  💫 Mystic - Saad 💫 , true], 
+  [ 5217778573223 ,  💫 Mystic - Sarethh 💫 , true],
+  [ 593968585283 ],
+  [ 5492266466080 ],
+  [ 5218442114446 ],
+  [ 59894808483 ],
+  [ 593980586516 ], 
+  [ 595975740803 ],  
+  [ 5492266613038 ],
+  [ 50497150165 ],
+  [ 51906662557 ],
+  [ 573183650526 ], 
+  [ 5217441298510 ], 
+  [ 5217294888993 ],
+  [ 595992611272 ],
+  [ 5219992843892 ],
+  [ 5493795319019 ],
+  [ 573147616444 ], 
+  [ 5219991402134 ],
+  [ 5219996125657 ],
+  [ 5492215034412 ],
+  [ 5492964650915 ],
+  [ 5218444937407 ]
+];
 
-let poster = ['https://telegra.ph/file/ba984d78fa802662438ee.jpg', 'https://telegra.ph/file/0e22282b399e105776618.jpg', 'https://telegra.ph/file/5e6456d22a8264b08a2bc.jpg', 'https://telegra.ph/file/996f53288a1e2f4f35812.jpg']
-let vn2 = poster[Math.floor(Math.random() * poster.length)];
+global.suittag = [ 5219993404349 ];
+global.prems = [ 51995386439 ];
 
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let ftroli = { key: { remoteJid: 'status@broadcast', participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 2023, status: 1, thumbnail: 'https://i.imgur.com/RbaRjrb.jpeg', surface: 1, message: wm, orderTitle: wm, sellerJid: '0@s.whatsapp.net' } } }
-let bjir = 'https://i.imgur.com/RbaRjrb.jpeg'
-let name = await conn.getName(who)
+global.packname =  Sticker ;
+global.author =  The Mystic - Bot ;
+global.wm =  The Mystic - Bot ;
+global.titulowm =  The Mystic - Bot ;
+global.titulowm2 = `The Mystic - Bot`
+global.igfg =  The Mystic - Bot ;
+global.wait =  *_[ ⏳ ] Cargando..._* ;
 
-let delay = time => new Promise(res => setTimeout(res, time))
-await conn.sendContact(m.chat, [[`201503742544` + `@s.whatsapp.net`, wm]], vn, {
- contextInfo: { 
- forwardingScore: 2023,
-isForwarded: false, 
- externalAdReply: {  
- title: '𝑇𝛨𝛯 𝐿𝛩𝛻𝛯𝐿𝑌 𝛩𝑊𝛮𝛯𝑅 𝛩𝐹', 
- body: '𝕊ℍ𝔸𝕎𝔸ℤ𝔸-𝔹𝕆𝕋', 
- sourceUrl: 'https://whatsapp.com/channel/0029Vael6wMJP20ze3IXJk0z',
- thumbnail: vn2,
- thumbnailUrl: vn2, 
- mediaType: 1,
- showAdAttribution: true, 
- renderLargerThumbnail: true, 
- mentionedJid: [m.sender]
-	}}}, { quoted: vn});
+global.imagen1 = fs.readFileSync( ./src/assets/images/menu/languages/es/menu.png );
+global.imagen2 = fs.readFileSync( ./src/assets/images/menu/languages/pt/menu.png );
+global.imagen3 = fs.readFileSync( ./src/assets/images/menu/languages/fr/menu.png )
+global.imagen4 = fs.readFileSync( ./src/assets/images/menu/languages/en/menu.png )
+global.imagen5 = fs.readFileSync( ./src/assets/images/menu/languages/ru/menu.png )
 
-}
-handler.help = ['owner', 'creator']
-handler.tags = ['info']
-handler.command = /^(owner|مطور|المطور)$/i
+global.mods = [];
 
-export default handler
+//* *******Tiempo***************
+global.d = new Date(new Date + 3600000);
+global.locale =  es ;
+global.dia = d.toLocaleDateString(locale, {weekday:  long });
+global.fecha = d.toLocaleDateString( es , {day:  numeric , month:  numeric , year:  numeric });
+global.mes = d.toLocaleDateString( es , {month:  long });
+global.año = d.toLocaleDateString( es , {year:  numeric });
+global.tiempo = d.toLocaleString( en-US , {hour:  numeric , minute:  numeric , second:  numeric , hour12: true});
+//* ****************************
+global.wm2 = `${dia} ${fecha}\nThe Mystic - Bot`;
+global.gt =  The Mystic - Bot ;
+global.mysticbot =  The Mystic - Bot ;
+global.channel =  https://whatsapp.com/channel/0029Vaein6eInlqIsCXpDs3y ;
+global.md =  https://github.com/BrunoSobrino/TheMystic-Bot-MD ;
+global.mysticbot =  https://github.com/BrunoSobrino/TheMystic-Bot-MD ;
+global.waitt =  *_[ ⏳ ] Cargando..._* ;
+global.waittt =  *_[ ⏳ ] Cargando..._* ;
+global.waitttt =  *_[ ⏳ ] Cargando..._* ;
+global.nomorown =  5219993404349 ;
+global.pdoc = [ application/vnd.openxmlformats-officedocument.presentationml.presentation ,  application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ,  application/vnd.openxmlformats-officedocument.wordprocessingml.document ,  application/vnd.ms-excel ,  application/msword ,  application/pdf ,  text/rtf ];
+global.cmenut =  ❖––––––『 ;
+global.cmenub =  ┊✦  ;
+global.cmenuf =  ╰━═┅═━––––––๑\n ;
+global.cmenua =  \n⌕ ❙❘❙❙❘❙❚❙❘❙❙❚❙❘❙❘❙❚❙❘❙❙❚❙❘❙❙❘❙❚❙❘ ⌕\n      ;
+global.dmenut =  *❖─┅──┅〈* ;
+global.dmenub =  *┊»* ;
+global.dmenub2 =  *┊* ;
+global.dmenuf =  *╰┅────────┅✦* ;
+global.htjava =  ⫹⫺ ;
+global.htki =  *⭑•̩̩͙⊱•••• ☪* ;
+global.htka =  *☪ ••••̩̩͙⊰•⭑* ;
+global.comienzo =  • • ◕◕════ ;
+global.fin =  ════◕◕ • • ;
+global.botdate = `*[ 📅 ] Fecha:*  ${moment.tz( America/Mexico_City ).format( DD/MM/YY )}`;
+global.bottime = `*[ ⏳ ] Hora:* ${moment.tz( America/Mexico_City ).format( HH:mm:ss )}`;
+global.fgif = {key: {participant:  0@s.whatsapp.net }, message: { videoMessage : { title : wm,  h : `Hmm`,  seconds :  999999999 ,  gifPlayback :  true ,  caption : bottime,  jpegThumbnail : fs.readFileSync( ./src/assets/images/menu/languages/es/menu.png )}}};
+global.multiplier = 99;
+global.flaaa = [
+   https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=water-logo&script=water-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextColor=%23000&shadowGlowColor=%23000&backgroundColor=%23000&text= ,
+   https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=crafts-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&text= ,
+   https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=amped-logo&doScale=true&scaleWidth=800&scaleHeight=500&text= ,
+   https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&fillTextPattern=Warning!&text= ,
+   https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&fillTextPattern=Warning!&fillColor1Color=%23f2aa4c&fillColor2Color=%23f2aa4c&fillColor3Color=%23f2aa4c&fillColor4Color=%23f2aa4c&fillColor5Color=%23f2aa4c&fillColor6Color=%23f2aa4c&fillColor7Color=%23f2aa4c&fillColor8Color=%23f2aa4c&fillColor9Color=%23f2aa4c&fillColor10Color=%23f2aa4c&fillOutlineColor=%23f2aa4c&fillOutline2Color=%23f2aa4c&backgroundColor=%23101820&text= ,
+];
+//* ************************
 
-
-async function getBuffer(url) {
-	return new Promise(async (resolve, reject) => {
-		let buffer;
-		await jimp
-			.read(url)
-			.then((image) => {
-				image.getBuffer(image._originalMime, function (err, res) {
-					buffer = res;
-				});
-			})
-			.catch(reject);
-		if (!Buffer.isBuffer(buffer)) reject(false);
-		resolve(buffer);
-	});
-}
+const file = fileURLToPath(import.meta.url);
+watchFile(file, () => {
+  unwatchFile(file);
+  console.log(chalk.redBright( Update \ config.js\  ));
+  import(`${file}?update=${Date.now()}`);
+});
